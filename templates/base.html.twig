@@ -47,7 +47,12 @@
             {% if not app.user and 'login' != app.request.attributes.get('_route') %}
                 <a href="{{ path('login') }}" class="btn btn-success">Se connecter</a>
             {% endif %}
-            <a href="{{ path('task_create') }}" class="btn btn-info pull-right">Créer une tâche</a>
+            <div class="pull-right">
+                <a href="{{ path('task_list') }}" class="btn btn-info">Consulter la liste des tâches à faire</a>
+                <a href="{{ path('task_list_done') }}" class="btn btn-primary">Consulter la liste des tâches
+                    terminées</a>
+                <a href="{{ path('task_create') }}" class="btn btn-success">Créer une tâche</a>
+            </div>
         </div>
     </div>
 
@@ -56,6 +61,12 @@
             {% for flash_message in app.session.flashBag.get('success') %}
                 <div class="alert alert-success" role="alert">
                     <strong>Superbe !</strong> {{ flash_message }}
+                </div>
+            {% endfor %}
+
+            {% for flash_message in app.session.flashBag.get('danger') %}
+                <div class="alert alert-danger" role="alert">
+                    <strong>Attention !</strong> {{ flash_message }}
                 </div>
             {% endfor %}
 

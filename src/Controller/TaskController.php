@@ -83,12 +83,22 @@ class TaskController extends AbstractController
      */
     public function toggleTaskAction(Task $task)
     {
-        $task->toggle(!$task->isDone());
-        $this->getDoctrine()->getManager()->flush();
+        if (!$task->isDone()) {
 
-        $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+            $task->toggle(!$task->isDone());
+            $this->getDoctrine()->getManager()->flush();
 
-        return $this->redirectToRoute('task_list');
+            $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+
+            return $this->redirectToRoute('task_list');
+        } elseif($task->isDone()) {
+            $task->toggle(!$task->isDone());
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('danger', sprintf('La tâche %s a bien été marquée comme NON faite.', $task->getTitle()));
+
+            return $this->redirectToRoute('task_list');
+        }
     }
 
     /**
