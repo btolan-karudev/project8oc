@@ -49,6 +49,11 @@ body {
     color: #333;
 }
 
+.padmarg {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
 footer {
     margin: 50px 0;
 }

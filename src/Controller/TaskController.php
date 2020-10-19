@@ -15,7 +15,18 @@ class TaskController extends AbstractController
      */
     public function listAction()
     {
-        return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findAll()]);
+        return $this->render('task/list.html.twig',
+            ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findBy(['isDone' => 0])]);
+    }
+
+    /**
+     * @Route("/tasksDone", name="task_list_done")
+     */
+    public function listTasksDone()
+    {
+        dump($this->getDoctrine()->getRepository('App:Task'));
+        return $this->render('task/list.html.twig',
+            ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findBy(['isDone' => 1])]);
     }
 
     /**
@@ -72,12 +83,22 @@ class TaskController extends AbstractController
      */
     public function toggleTaskAction(Task $task)
     {
-        $task->toggle(!$task->isDone());
-        $this->getDoctrine()->getManager()->flush();
+        if (!$task->isDone()) {
 
-        $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+            $task->toggle(!$task->isDone());
+            $this->getDoctrine()->getManager()->flush();
 
-        return $this->redirectToRoute('task_list');
+            $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+
+            return $this->redirectToRoute('task_list');
+        } elseif($task->isDone()) {
+            $task->toggle(!$task->isDone());
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('danger', sprintf('La tâche %s a bien été marquée comme NON faite.', $task->getTitle()));
+
+            return $this->redirectToRoute('task_list');
+        }
     }
 
     /**
