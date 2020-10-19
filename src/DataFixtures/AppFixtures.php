@@ -38,8 +38,8 @@ class AppFixtures extends Fixture
             $user = new User();
 
             $password = $this->encoder->encodePassword($user, "123456");
-            $user->setUsername("anonyme$i");
-            $user->setEmail("anonyme$i@gmail.com");
+            $user->setUsername("user$i");
+            $user->setEmail("user$i@gmail.com");
             $user->setPassword($password);
 
             $manager->persist($user);
