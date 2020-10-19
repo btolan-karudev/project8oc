@@ -15,7 +15,18 @@ class TaskController extends AbstractController
      */
     public function listAction()
     {
-        return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findAll()]);
+        return $this->render('task/list.html.twig',
+            ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findBy(['isDone' => 0])]);
+    }
+
+    /**
+     * @Route("/tasksDone", name="task_list_done")
+     */
+    public function listTasksDone()
+    {
+        dump($this->getDoctrine()->getRepository('App:Task'));
+        return $this->render('task/list.html.twig',
+            ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findBy(['isDone' => 1])]);
     }
 
     /**
