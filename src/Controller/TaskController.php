@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +14,7 @@ class TaskController extends AbstractController
 {
     /**
      * @Route("/tasks", name="task_list")
+     * @IsGranted("ROLE_USER")
      */
     public function listAction()
     {
@@ -31,6 +34,7 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasks/create", name="task_create")
+     * @IsGranted("ROLE_USER")
      */
     public function createAction(Request $request)
     {
@@ -57,6 +61,8 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasks/{id}/edit", name="task_edit")
+     * @Security("is_granted('ROLE_USER') and user === task.getAuthor()",
+     *      message="La tache ne vous appartienne pas, vous ne pouvez pas la modifier")
      */
     public function editAction(Task $task, Request $request)
     {
@@ -91,7 +97,7 @@ class TaskController extends AbstractController
             $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
 
             return $this->redirectToRoute('task_list');
-        } elseif($task->isDone()) {
+        } elseif ($task->isDone()) {
             $task->toggle(!$task->isDone());
             $this->getDoctrine()->getManager()->flush();
 
@@ -103,6 +109,8 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasks/{id}/delete", name="task_delete")
+     * * @Security("is_granted('ROLE_USER') and user === task.getAuthor()",
+     *      message="La tache ne vous appartienne pas, vous ne pouvez pas la supprimer")
      */
     public function deleteTaskAction(Task $task)
     {
