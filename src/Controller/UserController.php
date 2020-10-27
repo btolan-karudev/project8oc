@@ -14,6 +14,7 @@ class UserController extends AbstractController
 {
     /**
      * @Route("/users", name="user_list")
+     * @IsGranted("ROLE_ADMIN")
      *
      */
     public function listAction()
@@ -23,6 +24,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/users/create", name="user_create")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function createAction(Request $request, UserPasswordEncoderInterface $encoder)
     {
@@ -49,7 +51,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/users/{id}/edit", name="user_edit")
-     * @IsGranted("ROLE_USER")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function editAction(User $user, Request $request, UserPasswordEncoderInterface $encoder)
     {

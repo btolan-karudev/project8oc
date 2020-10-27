@@ -86,6 +86,7 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasks/{id}/toggle", name="task_toggle")
+     * @IsGranted("ROLE_USER")
      */
     public function toggleTaskAction(Task $task)
     {
@@ -109,7 +110,7 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasks/{id}/delete", name="task_delete")
-     * * @Security("is_granted('ROLE_USER') and user === task.getAuthor()",
+     * @Security("is_granted('ROLE_USER') and user === task.getAuthor()",
      *      message="La tache ne vous appartienne pas, vous ne pouvez pas la supprimer")
      */
     public function deleteTaskAction(Task $task)
