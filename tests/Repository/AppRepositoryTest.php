@@ -21,7 +21,7 @@ class AppRepositoryTest extends KernelTestCase
         $users = self::$container->get(UserRepository::class)->count([]);
         $tasks = self::$container->get(TaskRepository::class)->count([]);
 
-        $this->assertEquals(11, $users);
+        $this->assertEquals(12, $users);
         $this->assertEquals(100, $tasks);
     }
 
