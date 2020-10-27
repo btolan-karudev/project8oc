@@ -20,6 +20,9 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
+        //User management
+        $users = [];
+
         $adminRole = new Role();
         $adminRole->setTitle('ROLE_ADMIN');
         $manager->persist($adminRole);
@@ -32,8 +35,15 @@ class AppFixtures extends Fixture
 
         $manager->persist($adminUser);
 
-        //User management
-        $users = [];
+        $anonymousUser = new User();
+        $anonymousUser->setUsername('anonymous');
+        $anonymousUser->setPassword($this->encoder->encodePassword($anonymousUser, 'anonymous'));
+        $anonymousUser->setEmail('anonymous@tolan.me');
+
+        $manager->persist($anonymousUser);
+        $users[] = $anonymousUser;
+
+
         for ($i = 1; $i <= 10; $i++) {
             $user = new User();
 
@@ -45,6 +55,8 @@ class AppFixtures extends Fixture
             $manager->persist($user);
             $users[] = $user;
         }
+
+
 
         // Task management
         for ($i = 1; $i <= 100; $i++) {

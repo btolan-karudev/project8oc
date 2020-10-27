@@ -39,20 +39,23 @@
 <div class="container">
     <div class="row padmarg">
         <div class="col-md-12">
+            {% if app.user and app.user.userRoles == "ROLE_ADMIN" %}
             <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
+            {% endif %}
             {% if app.user %}
-                <a href="{{ path('logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
+                <a href="{{ path('logout') }}" class="left-auto btn btn-danger">Se déconnecter</a>
+                <div class="pull-right">
+                    <a href="{{ path('task_list') }}" class="btn btn-info">Consulter la liste des tâches à faire</a>
+                    <a href="{{ path('task_list_done') }}" class="btn btn-primary">Consulter la liste des tâches
+                        terminées</a>
+                    <a href="{{ path('task_create') }}" class="btn btn-success">Créer une tâche</a>
+                </div>
             {% endif %}
 
             {% if not app.user and 'login' != app.request.attributes.get('_route') %}
                 <a href="{{ path('login') }}" class="btn btn-success">Se connecter</a>
             {% endif %}
-            <div class="pull-right">
-                <a href="{{ path('task_list') }}" class="btn btn-info">Consulter la liste des tâches à faire</a>
-                <a href="{{ path('task_list_done') }}" class="btn btn-primary">Consulter la liste des tâches
-                    terminées</a>
-                <a href="{{ path('task_create') }}" class="btn btn-success">Créer une tâche</a>
-            </div>
+
         </div>
     </div>
 
