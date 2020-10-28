@@ -24,6 +24,7 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasksDone", name="task_list_done")
+     * @IsGranted("ROLE_USER")
      */
     public function listTasksDone()
     {

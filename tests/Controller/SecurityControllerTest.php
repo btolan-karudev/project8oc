@@ -24,6 +24,15 @@ class SecurityControllerTest extends WebTestCase
 
     }
 
+    public function testRedirectAfterLogin()
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/tasks');
+
+        $this->assertResponseRedirects();
+    }
+
     public function testLoginBadCredentials()
     {
         $client = static::createClient();
@@ -79,6 +88,20 @@ class SecurityControllerTest extends WebTestCase
         $this->login($client, $users['user']);
 
         $client->request('GET', '/tasks');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        self::assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+
+    }
+
+    public function testUserAccessTasksDone()
+    {
+        $client = static::createClient();
+
+        $users = $this->loadFixtureFiles([dirname(__DIR__) . '\DataFixturesTest.yaml']);
+        $this->login($client, $users['user']);
+
+        $client->request('GET', '/tasksDone');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         self::assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
