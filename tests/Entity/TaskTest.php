@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Tests\Entity;
+namespace Tests\App\Entity;
 
 
 
@@ -42,6 +42,23 @@ class TaskTest extends KernelTestCase
 
         $this->assertCount(1, $error);
 
+    }
+
+
+    public function testDoneCreated()
+    {
+        $task = new Task();
+
+        $this->assertFalse($task->isDone());
+        $this->assertInstanceOf('DateTime', $task->getCreatedAt());
+    }
+
+    public function testGetDoneCreated()
+    {
+        $task = new Task();
+
+        $this->assertFalse($task->getIsDone());
+        $this->assertInstanceOf('DateTime', $task->getCreatedAt());
     }
 
 }

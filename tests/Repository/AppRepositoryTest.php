@@ -5,6 +5,7 @@ namespace App\Tests\Repository;
 
 
 use App\DataFixtures\AppFixtures;
+use App\Repository\RoleRepository;
 use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
@@ -20,9 +21,11 @@ class AppRepositoryTest extends KernelTestCase
         $this->loadFixtures([AppFixtures::class]);
         $users = self::$container->get(UserRepository::class)->count([]);
         $tasks = self::$container->get(TaskRepository::class)->count([]);
+        $roles = self::$container->get(RoleRepository::class)->count([]);
 
-        $this->assertEquals(11, $users);
+        $this->assertEquals(12, $users);
         $this->assertEquals(100, $tasks);
+        $this->assertEquals(2, $roles);
     }
 
 }

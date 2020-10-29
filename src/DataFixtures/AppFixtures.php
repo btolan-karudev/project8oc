@@ -27,6 +27,10 @@ class AppFixtures extends Fixture
         $adminRole->setTitle('ROLE_ADMIN');
         $manager->persist($adminRole);
 
+        $userRole = new Role();
+        $userRole->setTitle('ROLE_USER_LAMBDA');
+        $manager->persist($userRole);
+
         $adminUser = new User();
         $adminUser->setUsername('beniamin');
         $adminUser->setPassword($this->encoder->encodePassword($adminUser, 'admin'));
@@ -51,6 +55,7 @@ class AppFixtures extends Fixture
             $user->setUsername("user$i");
             $user->setEmail("user$i@gmail.com");
             $user->setPassword($password);
+            $user->addUserRole($userRole);
 
             $manager->persist($user);
             $users[] = $user;

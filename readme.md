@@ -5,4 +5,4 @@ test
 >
 > php bin/phpunit
 >
-> 
+> php bin/phpunit --coverage-html coverage3
