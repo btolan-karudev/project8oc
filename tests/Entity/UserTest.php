@@ -8,6 +8,7 @@ use App\Entity\Role;
 use App\Entity\Task;
 use App\Entity\User;
 
+use App\Repository\RoleRepository;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -87,6 +88,8 @@ class UserTest extends KernelTestCase
     {
         $userRole = new Role();
         $userRole->setTitle('ROLE_TEST');
+
+//        $testmook = $this->getMockBuilder(RoleRepository::class)->getMock();
 
         $user = new User();
         $user->addUserRole($userRole);
