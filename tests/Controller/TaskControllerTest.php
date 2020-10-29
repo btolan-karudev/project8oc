@@ -3,6 +3,7 @@
 namespace Tests\App\Controller;
 
 
+use App\Entity\Task;
 use App\Tests\NeedLogin;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -13,11 +14,21 @@ class TaskControllerTest extends WebTestCase
     use NeedLogin;
     use FixturesTrait;
 
+    private $client = null;
+    private $getEntityManager = null;
+
+    public function setUp()
+    {
+        $this->client = self::createClient();
+
+        $this->getEntityManager = $this->client->getContainer()->get('doctrine.orm.entity_manager');
+    }
+
     public function testUserConnectedIsRequired()
     {
-        $client = static::createClient();
 
-        $client->request('GET', '/tasks');
+
+        $this->client->request('GET', '/tasks');
 
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
 
@@ -25,9 +36,8 @@ class TaskControllerTest extends WebTestCase
 
     public function testRedirectIfNotConnected()
     {
-        $client = static::createClient();
 
-        $client->request('GET', '/tasksDone');
+        $this->client->request('GET', '/tasksDone');
 
         $this->assertResponseRedirects();
 
@@ -35,13 +45,12 @@ class TaskControllerTest extends WebTestCase
 
     public function testCreateActionRedirectNotUser()
     {
-        $client = static::createClient();
 
-        $client->request('GET', '/tasks/create');
+        $this->client->request('GET', '/tasks/create');
 
-        $crawler = $client->followRedirect();
+        $crawler = $this->client->followRedirect();
 
-        self::assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        self::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         self::assertSame(1, $crawler->filter('input[name="_username"]')->count());
         self::assertSame(1, $crawler->filter('input[name="_password"]')->count());
@@ -49,38 +58,139 @@ class TaskControllerTest extends WebTestCase
         self::assertSelectorTextContains('button', 'Se connecter');
     }
 
-    public function testCreateAction()
+    public function testCreateActionTask()
     {
-        $client = static::createClient();
-        $users = $this->loadFixtureFiles([dirname(__DIR__) . '\DataFixturesTest.yaml']);
-        $this->login($client, $users['user']);
 
-        $crawler = $client->request('GET', '/tasks/create');
+        $users = $this->loadFixtureFiles([dirname(__DIR__) . '\DataFixturesTest.yaml']);
+
+        $this->login($this->client, $users['beniamin']);
+
+        $crawler = $this->client->request('POST', '/tasks/create');
 
         $form = $crawler->selectButton('Ajouter')->form([
             'task[title]' => 'Test création tâche',
             'task[content]' => 'Contenu de la tâche test'
         ]);
 
-        $client->submit($form);
+        $this->client->submit($form);
 
-        $crawler = $client->request('GET', '/tasks');
+        $crawler = $this->client->followRedirect();
 
-        self::assertSame(0, $crawler->filter('.alert.alert-success')->count());
+        self::assertSame(1, $crawler->filter('.alert.alert-success')->count());
 
         self::assertGreaterThan(
-            -1,
+            0,
             $crawler->filter('div:contains("La tâche a été bien été ajoutée.")')->count()
         );
 
-        self::assertSame(0, $crawler->filter('html:contains("Test création d\'une tâche")')->count());
-        self::assertSame(0, $crawler->filter('html:contains("Contenu de la tâche test")')->count());
 
-//        $this->getEntityManager = $client->getContainer()->get('doctrine.orm.entity_manager');
-//        $userTaskCreated = $this->getEntityManager->getRepository(Task::class)->findOneBy([
-//            'title' => 'Test création d\'une tâche'
-//        ]);
+        self::assertSame(1, $crawler->filter('html:contains("Test création tâche")')->count());
+        self::assertSame(1, $crawler->filter('html:contains("Contenu de la tâche test")')->count());
+
+        $this->getEntityManager = $this->client->getContainer()->get('doctrine.orm.entity_manager');
+        $userTaskCreated = $this->getEntityManager->getRepository(Task::class)->findOneBy([
+            'title' => 'Test création tâche'
+        ]);
+        $this->assertSame('beniamin', $userTaskCreated->getAuthor()->getUsername());
+
 
     }
+
+    public function testEditAction()
+    {
+        $users = $this->loadFixtureFiles([dirname(__DIR__) . '\DataFixturesTest.yaml']);
+
+        $this->login($this->client, $users['beniamin']);
+
+        $crawler = $this->client->request('POST', '/tasks/1/edit');
+
+        self::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+
+        self::assertSame(1, $crawler->filter('input[name="task[title]"]')->count());
+        self::assertSame(1, $crawler->filter('textarea[name="task[content]"]')->count());
+
+        $form = $crawler->selectButton('Modifier')->form([
+            'task[title]' => 'Modification d\'une tâche',
+            'task[content]' => 'Modifier le contenu de la tâche'
+        ]);
+
+        $this->client->submit($form);
+
+        $crawler = $this->client->followRedirect();
+
+        self::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+
+        self::assertSame(1, $crawler->filter('.alert.alert-success')->count());
+        self::assertGreaterThan(
+            1,
+            $crawler->filter('div:contains("La tâche a bien été modifiée.")')->count()
+        );
+
+    }
+
+    public function testToggleCompleted()
+    {
+        $users = $this->loadFixtureFiles([dirname(__DIR__) . '\DataFixturesTest.yaml']);
+
+        $this->login($this->client, $users['beniamin']);
+
+        $task =  $users['task1'];
+
+        $task->setIsDone(0);
+
+        $this->client->request('GET', 'tasks/2/toggle');
+
+
+        $crawler = $this->client->followRedirect();
+
+
+        self::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+
+
+        self::assertSame(1, $crawler->filter('div.alert-success:contains("marquée comme faite.")')->count());
+    }
+
+    public function testToggleInCompleted()
+    {
+        $users = $this->loadFixtureFiles([dirname(__DIR__) . '\DataFixturesTest.yaml']);
+
+        $this->login($this->client, $users['beniamin']);
+
+        $task =  $users['task2'];
+
+        $task->setIsDone(1);
+
+
+        $this->client->request('GET', 'tasks/2/toggle');
+
+
+        $crawler = $this->client->followRedirect();
+
+
+        self::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+
+
+        self::assertSame(1, $crawler->filter('div.alert-danger:contains("NON faite.")')->count());
+    }
+
+    public function testDeleteTaskAction()
+    {
+        $users = $this->loadFixtureFiles([dirname(__DIR__) . '\DataFixturesTest.yaml']);
+
+        $this->login($this->client, $users['beniamin']);
+
+
+        $this->client->request('GET', 'tasks/1/delete');
+
+        $crawler = $this->client->followRedirect();
+
+        self::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+
+        $this->assertEquals(
+            1,
+            $crawler->filter('div.alert-success:contains("La tâche a bien été supprimée.")')->count()
+        );
+    }
+
 
 }

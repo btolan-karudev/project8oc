@@ -8,7 +8,6 @@ use App\Entity\Role;
 use App\Entity\Task;
 use App\Entity\User;
 
-use App\Repository\RoleRepository;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\ConstraintViolation;

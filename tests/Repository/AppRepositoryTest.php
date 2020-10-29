@@ -25,7 +25,7 @@ class AppRepositoryTest extends KernelTestCase
 
         $this->assertEquals(12, $users);
         $this->assertEquals(100, $tasks);
-        $this->assertEquals(1, $roles);
+        $this->assertEquals(2, $roles);
     }
 
 }
