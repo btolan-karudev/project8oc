@@ -40,3 +40,12 @@ php bin/phpunit
 ```system
 php bin/phpunit --coverage-html public/coverage
 ```
+## Les issues
+
+Vous retrouvez les issues ici [TO DO List Issues](https://github.com/btolan-karudev/project8oc/issues)
+
+## Le Code Coverage
+
+Vous retrouvez L’ensemble des fichiers HTML générés par PHPUnit dans le dir public/coverage
+
+![PHPUnit Coverage!](/assets/img/Coverage.JPG "PHPunit Coverage")
