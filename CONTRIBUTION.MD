@@ -1,6 +1,6 @@
 # Contribution
 
-## Première Etape : Clonage:
+## Clonage:
 
 ```system
 git clone https://github.com/btolan-karudev/project8oc
@@ -12,11 +12,11 @@ git checkout –b testsExample
 ``` 
   
 Après cette étape vous pouvez faire vos modifications.
-### Important TEST avant la prochaine étape
+### Important: Les TESTS sont à faire avant la prochaine étape
 Vous effectuez les tests unitaires et fonctionnels avant de faire le pull request.
 Tout pull request sans test sera refusé sans aucun commentaire.
 
-## Les « Pull Request » :  
+## Le « Pull Request » :  
 ```system
 git push origin testsExample
 ``` 
