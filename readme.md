@@ -48,4 +48,4 @@ Vous retrouvez les issues ici [TO DO List Issues](https://github.com/btolan-karu
 
 Vous retrouvez L’ensemble des fichiers HTML générés par PHPUnit dans le dir public/coverage
 
-![PHPUnit Coverage!](/assets/img/Coverage.JPG "PHPunit Coverage")
+![PHPUnit Coverage!](public/img/Coverage.JPG "PHPunit Coverage")
