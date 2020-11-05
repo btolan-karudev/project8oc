@@ -39,7 +39,9 @@
 <div class="container">
     <div class="row padmarg">
         <div class="col-md-12">
-            {% if app.user and app.user.userRoles == "ROLE_ADMIN" %}
+
+            {% if app.user and app.user.userRoles[0].title == "ROLE_ADMIN" %}
+
             <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
             {% endif %}
             {% if app.user %}
