@@ -42,6 +42,7 @@
             {% set userRole = app.user.userRoles[0] is defined  ? app.user.userRoles[0].title : "ROLE_USER" %}
             {% if app.user and userRole == "ROLE_ADMIN" %}
             <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
+            <a href="{{ path('user_list') }}" class="btn btn-info">Liste utilisateurs</a>
             {% endif %}
             {% if app.user %}
                 <a href="{{ path('logout') }}" class="left-auto btn btn-danger">Se déconnecter</a>
