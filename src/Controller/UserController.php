@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Role;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\RoleRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,6 +23,41 @@ class UserController extends AbstractController
     {
         return $this->render('user/list.html.twig', ['users' => $this->getDoctrine()->getRepository('App:User')->findAll()]);
     }
+
+    /**
+     * @Route("/users/{id}/toggleAdmin", name="admin_toggle")
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function toggleAdmin(User $user, RoleRepository $roleRepository)
+    {
+
+
+        if ($user->getRoles()[0] == "ROLE_USER_LAMBDA") {
+            $lambdaRole = $roleRepository->findOneBy(['title' => 'ROLE_USER_LAMBDA']);
+            $adminRole = $roleRepository->findOneBy(['title' => 'ROLE_ADMIN']);
+            $user->removeUserRole($lambdaRole);
+            $user->addUserRole($adminRole);
+
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', sprintf('Le role a ete change.'));
+
+
+        } elseif ($user->getRoles()[0] == "ROLE_ADMIN") {
+            $lambdaRole = $roleRepository->findOneBy(['title' => 'ROLE_USER_LAMBDA']);
+            $adminRole = $roleRepository->findOneBy(['title' => 'ROLE_ADMIN']);
+            $user->removeUserRole($adminRole);
+            $user->addUserRole($lambdaRole);
+
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', sprintf('Le role a ete change.'));
+
+        }
+
+        return $this->redirectToRoute('user_list');
+    }
+
 
     /**
      * @Route("/users/create", name="user_create")
@@ -72,4 +109,5 @@ class UserController extends AbstractController
 
         return $this->render('user/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
     }
+
 }

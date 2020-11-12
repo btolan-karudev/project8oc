@@ -26,6 +26,8 @@ security:
             guard:
                 authenticators:
                     - App\Security\AppAuthenticator
+
+
     access_control:
 #         - { path: ^/admin, roles: ROLE_ADMIN }
 #         - { path: ^/tasks, roles: ROLE_USER }

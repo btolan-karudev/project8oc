@@ -7,7 +7,8 @@
 {% block body %}
     {% if users|length == 0 %}
         <div class="alert alert-warning" role="alert">
-            Il n'y a pas encore d'utilisateur enregistré. <a href="{{ path('user_create') }}" class="btn btn-warning pull-right">Créer un utilisateur</a>
+            Il n'y a pas encore d'utilisateur enregistré. <a href="{{ path('user_create') }}"
+                                                             class="btn btn-warning pull-right">Créer un utilisateur</a>
         </div>
     {% else %}
         <div class="row">
@@ -28,6 +29,15 @@
                         <td>{{ user.email }}</td>
                         <td>
                             <a href="{{ path('user_edit', {'id' : user.id}) }}" class="btn btn-success btn-sm">Edit</a>
+                            {% set userRole = user.userRoles[0] is defined  ? user.userRoles[0].title : "ROLE_USER_LAMBDA" %}
+                            {% if userRole == "ROLE_ADMIN" %}
+                                <a href="{{ path('admin_toggle', {'id' : user.id}) }}"
+                                   class="btn btn-warning btn-sm">Make User</a>
+                            {% endif %}
+                            {% if userRole == "ROLE_USER_LAMBDA" %}
+                                <a href="{{ path('admin_toggle', {'id' : user.id}) }}"
+                                   class="btn btn-success btn-sm">Make Admin</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

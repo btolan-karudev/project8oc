@@ -43,6 +43,7 @@ class AppFixtures extends Fixture
         $anonymousUser->setUsername('anonymous');
         $anonymousUser->setPassword($this->encoder->encodePassword($anonymousUser, 'anonymous'));
         $anonymousUser->setEmail('anonymous@tolan.me');
+        $anonymousUser->addUserRole($userRole);
 
         $manager->persist($anonymousUser);
         $users[] = $anonymousUser;
