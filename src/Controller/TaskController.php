@@ -62,7 +62,7 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasks/{id}/edit", name="task_edit")
-     * @Security("is_granted('ROLE_USER') and user === task.getAuthor()",
+     * @Security("(is_granted('ROLE_USER') and user === task.getAuthor()) or is_granted('ROLE_ADMIN')",
      *      message="La tache ne vous appartienne pas, vous ne pouvez pas la modifier")
      */
     public function editAction(Task $task, Request $request)
@@ -112,7 +112,7 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasks/{id}/delete", name="task_delete")
-     * @Security("is_granted('ROLE_USER') and user === task.getAuthor()",
+     * @Security("(is_granted('ROLE_USER') and user === task.getAuthor() or is_granted('ROLE_ADMIN'))",
      *      message="La tache ne vous appartienne pas, vous ne pouvez pas la supprimer")
      */
     public function deleteTaskAction(Task $task)
