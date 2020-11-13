@@ -63,20 +63,23 @@ class UserController extends AbstractController
      * @Route("/users/create", name="user_create")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function createAction(Request $request, UserPasswordEncoderInterface $encoder, RoleRepository $roleRepository)
+    public function createAction(Request $request, UserPasswordEncoderInterface $encoder)
     {
         $user = new User();
+
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            foreach ($user->getUserRoles() as $role) {
+                $role->addUser($user);
+            }
+
             $password = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
-
-            $lambdaRole = $roleRepository->findOneBy(['title' => 'ROLE_USER_LAMBDA']);
-            $user->addUserRole($lambdaRole);
 
             $em->persist($user);
             $em->flush();
@@ -86,24 +89,33 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_list');
         }
 
-        return $this->render('user/create.html.twig', ['form' => $form->createView()]);
+        return $this->render('user/create.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     /**
      * @Route("/users/{id}/edit", name="user_edit")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function editAction(User $user, Request $request, UserPasswordEncoderInterface $encoder)
+    public function editAction(User $user, Request $request, UserPasswordEncoderInterface $encoder, RoleRepository $roleRepository)
     {
+        $lambdaRole = $roleRepository->findOneBy(['title' => 'ROLE_USER_LAMBDA']);
+        $adminRole = $roleRepository->findOneBy(['title' => 'ROLE_ADMIN']);
+
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $em = $this->getDoctrine()->getManager();
+
             $password = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
 
-            $this->getDoctrine()->getManager()->flush();
+
+            $em->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 

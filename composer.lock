@@ -1228,6 +1228,7 @@
                 "reflection",
                 "static"
             ],
+            "abandoned": "roave/better-reflection",
             "time": "2020-03-27T11:06:43+00:00"
         },
         {
@@ -1389,6 +1390,7 @@
                 "faker",
                 "fixtures"
             ],
+            "abandoned": true,
             "time": "2019-12-12T13:22:17+00:00"
         },
         {
@@ -2580,16 +2582,16 @@
         },
         {
             "name": "symfony/asset",
-            "version": "v5.1.6",
+            "version": "v5.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/asset.git",
-                "reference": "ef0bcafce1c14bbf49838b01e990a8bfafd071eb"
+                "reference": "19c59713f750642206b21a1edec5c18dea80f979"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/asset/zipball/ef0bcafce1c14bbf49838b01e990a8bfafd071eb",
-                "reference": "ef0bcafce1c14bbf49838b01e990a8bfafd071eb",
+                "url": "https://api.github.com/repos/symfony/asset/zipball/19c59713f750642206b21a1edec5c18dea80f979",
+                "reference": "19c59713f750642206b21a1edec5c18dea80f979",
                 "shasum": ""
             },
             "require": {
@@ -2604,11 +2606,6 @@
                 "symfony/http-foundation": ""
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.1-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\Asset\\": ""
@@ -2633,7 +2630,21 @@
             ],
             "description": "Symfony Asset Component",
             "homepage": "https://symfony.com",
-            "time": "2020-09-02T16:23:27+00:00"
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-10-24T12:01:57+00:00"
         },
         {
             "name": "symfony/browser-kit",
