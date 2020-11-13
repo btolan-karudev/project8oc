@@ -47,7 +47,7 @@ class User implements UserInterface
     private $tasks;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Role::class, mappedBy="users")
+     * @ORM\ManyToMany(targetEntity=Role::class, mappedBy="users", cascade={"persist"} )
      */
     private $userRoles;
 

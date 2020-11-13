@@ -12,3 +12,11 @@
         {{ form_end(form) }}
     </div>
 {% endblock %}
+
+{% block jsUserEdit %}
+    <script type="text/javascript">
+        $( document ).ready(function() {
+            $( "div#user_userRoles" ).parent().hide();
+        });
+    </script>
+{% endblock %}
