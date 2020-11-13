@@ -9,7 +9,7 @@ App\Entity\User:
   user:
     username: "user1"
     email: "user@domain.fr"
-    password: \$argon2id\$v=19\$m=65536,t=4,p=1\$ZzdscmVrN0pzRjNCWDhOLw\$PQ805BLpk+H2+mFDGdt4LXRhSn9TIItRe7Wzb8d9rdQ
+    password: \$2y\$13\$PensB90oTnkKVTsWIg7tj.tbJ9Qndh1J4GHdbW3ho8iba8TPIcOOa
     userRoles: ['@userRol']
   beniamin:
     username: "beniamin"
@@ -19,7 +19,8 @@ App\Entity\User:
   anonyme:
     username: "anonymous"
     email: "anonyme@domaine.fr"
-    password: \$argon2id\$v=19\$m=65536,t=4,p=1\$WEkxdDQySFIublkudG5pLw\$gyZjHOzyQ65eHXNYzpTAGmXjEz/NBAGr78Nm4C/BD/g
+    password: \$2y\$13\$PensB90oTnkKVTsWIg7tj.tbJ9Qndh1J4GHdbW3ho8iba8TPIcOOa
+    userRoles: ['@userRol']
 
 App\Entity\Task:
   task1:
