@@ -32,11 +32,11 @@
                             {% set userRole = user.userRoles[0] is defined  ? user.userRoles[0].title : "ROLE_USER_LAMBDA" %}
                             {% if userRole == "ROLE_ADMIN" %}
                                 <a href="{{ path('admin_toggle', {'id' : user.id}) }}"
-                                   class="btn btn-warning btn-sm">Make User</a>
+                                   class="btn btn-warning btn-sm">Changer le rôle en Utilisateur Standard</a>
                             {% endif %}
                             {% if userRole == "ROLE_USER_LAMBDA" %}
                                 <a href="{{ path('admin_toggle', {'id' : user.id}) }}"
-                                   class="btn btn-success btn-sm">Make Admin</a>
+                                   class="btn btn-success btn-sm">Changer le rôle en Utilisateur Admin</a>
                             {% endif %}
                         </td>
                     </tr>

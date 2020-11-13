@@ -30,9 +30,8 @@ class UserController extends AbstractController
      */
     public function toggleAdmin(User $user, RoleRepository $roleRepository)
     {
-
-
-        if ($user->getRoles()[0] == "ROLE_USER_LAMBDA") {
+        $roleZero = $user->getRoles()[0] ? $user->getRoles()[0] : "ROLE_USER_LAMBDA";
+        if ($roleZero == "ROLE_USER_LAMBDA") {
             $lambdaRole = $roleRepository->findOneBy(['title' => 'ROLE_USER_LAMBDA']);
             $adminRole = $roleRepository->findOneBy(['title' => 'ROLE_ADMIN']);
             $user->removeUserRole($lambdaRole);
@@ -42,8 +41,8 @@ class UserController extends AbstractController
 
             $this->addFlash('success', sprintf('Le rôle a été changé avec success.'));
 
-
-        } elseif ($user->getRoles()[0] == "ROLE_ADMIN") {
+        }
+        if ($roleZero == "ROLE_ADMIN") {
             $lambdaRole = $roleRepository->findOneBy(['title' => 'ROLE_USER_LAMBDA']);
             $adminRole = $roleRepository->findOneBy(['title' => 'ROLE_ADMIN']);
             $user->removeUserRole($adminRole);
@@ -51,7 +50,7 @@ class UserController extends AbstractController
 
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('info', sprintf('Le rôle a été changé avec success.'));
+            $this->addFlash('success', sprintf('Le rôle a été changé avec success.'));
 
         }
 
