@@ -40,7 +40,7 @@ class UserController extends AbstractController
 
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', sprintf('Le role a ete change.'));
+            $this->addFlash('success', sprintf('Le rôle a été changé avec success.'));
 
 
         } elseif ($user->getRoles()[0] == "ROLE_ADMIN") {
@@ -51,7 +51,7 @@ class UserController extends AbstractController
 
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', sprintf('Le role a ete change.'));
+            $this->addFlash('info', sprintf('Le rôle a été changé avec success.'));
 
         }
 
@@ -98,24 +98,17 @@ class UserController extends AbstractController
      * @Route("/users/{id}/edit", name="user_edit")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function editAction(User $user, Request $request, UserPasswordEncoderInterface $encoder, RoleRepository $roleRepository)
+    public function editAction(User $user, Request $request, UserPasswordEncoderInterface $encoder)
     {
-        $lambdaRole = $roleRepository->findOneBy(['title' => 'ROLE_USER_LAMBDA']);
-        $adminRole = $roleRepository->findOneBy(['title' => 'ROLE_ADMIN']);
-
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $em = $this->getDoctrine()->getManager();
-
             $password = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
 
-
-            $em->flush();
+            $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 
