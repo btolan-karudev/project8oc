@@ -63,7 +63,7 @@ class UserController extends AbstractController
      * @Route("/users/create", name="user_create")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function createAction(Request $request, UserPasswordEncoderInterface $encoder)
+    public function createAction(Request $request, UserPasswordEncoderInterface $encoder, RoleRepository $roleRepository)
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -74,6 +74,9 @@ class UserController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $password = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
+
+            $lambdaRole = $roleRepository->findOneBy(['title' => 'ROLE_USER_LAMBDA']);
+            $user->addUserRole($lambdaRole);
 
             $em->persist($user);
             $em->flush();
